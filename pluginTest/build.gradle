@@ -1,0 +1,14 @@
+buildscript {
+    repositories { flatDir name: 'libs', dirs: "../plugin/build/libs" }
+    dependencies { classpath 'blog.bocharoviliyav.swaggerhub:plugin:1.0-SNAPSHOT' }
+}
+
+apply plugin: 'swaggerhub-plugin'
+
+swaggerhubUpload {
+    api = 'testApi'
+    inputFile = "./testApi.json"
+    token = 'token'
+    owner = 'owner'
+    skipOnError = true
+}
