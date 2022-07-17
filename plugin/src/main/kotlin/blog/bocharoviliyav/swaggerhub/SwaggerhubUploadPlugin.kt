@@ -30,17 +30,17 @@ data class SwaggerHubRequest(
 )
 
 abstract class SwaggerhubPluginExtension {
-      abstract val owner: Property<String>
-      abstract val api: Property<String>
-      abstract val version: Property<String>
-      abstract val token: Property<String>
-      abstract val inputFile: Property<String>
-      abstract val skipOnError: Property<Boolean>
-      abstract val format: Property<String>
-      abstract val private: Property<Boolean>
-      abstract val host: Property<String>
-      abstract val port: Property<Int>
-      abstract val protocol: Property<String>
+    abstract val owner: Property<String>
+    abstract val api: Property<String>
+    abstract val version: Property<String>
+    abstract val token: Property<String>
+    abstract val inputFile: Property<String>
+    abstract val skipOnError: Property<Boolean>
+    abstract val format: Property<String>
+    abstract val private: Property<Boolean>
+    abstract val host: Property<String>
+    abstract val port: Property<Int>
+    abstract val protocol: Property<String>
 }
 
 
@@ -107,12 +107,16 @@ open class SwaggerhubUploadTask : DefaultTask() {
 
     @get:Input
     var format: String = "json"
+
     @get:Input
     var private: Boolean = true
+
     @get:Input
     var host: String = "api.swaggerhub.com"
+
     @get:Input
     var protocol: String = "https"
+
     @get:Input
     var port: Int = 443
 
@@ -122,15 +126,7 @@ open class SwaggerhubUploadTask : DefaultTask() {
     @Throws(GradleException::class)
     fun uploadDefinition() {
         swaggerHubClient = SwaggerHubClient(host, port, protocol, token)
-        LOGGER.info(
-            "Uploading to " + host
-                    + ": api: " + api
-                    + ", owner: " + owner
-                    + ", version: " + version
-                    + ", inputFile: " + inputFile
-                    + ", format: " + format
-                    + ", isPrivate: " + private
-        )
+        LOGGER.info("Uploading to $host api: $api, owner: $owner, version: $version, inputFile: $inputFile, format: $inputFile, private: $inputFile")
         try {
 
             val content = String(Files.readAllBytes(Paths.get(inputFile)), Charset.forName("UTF-8"))
@@ -166,16 +162,14 @@ class SwaggerHubClient(
     private val token: String
 ) {
 
-    //private val client: OkHttpClient = OkHttpClient()
-
     @Throws(GradleException::class)
     fun saveDefinition(swaggerHubRequest: SwaggerHubRequest, skipOnError: Boolean) {
-        val client: OkHttpClient = OkHttpClient()
+        val client = OkHttpClient()
         val httpUrl: HttpUrl = getUploadUrl(swaggerHubRequest)
         val mediaType: MediaType? = "application/json".toMediaTypeOrNull()
         val httpRequest: Request = buildPostRequest(httpUrl, mediaType!!, swaggerHubRequest.swagger)
         try {
-            LOGGER.info("Trying to upload OpenApi definition")
+            LOGGER.info("Start uploading OpenApi definition")
             val response: Response = client.newCall(httpRequest).execute()
             if (!response.isSuccessful && !skipOnError) {
                 throw GradleException("Failed to upload definition: ${response.body?.string()}")

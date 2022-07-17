@@ -1,6 +1,6 @@
 buildscript {
     repositories { flatDir name: 'libs', dirs: "../plugin/build/libs" }
-    dependencies { classpath 'blog.bocharoviliyav.swaggerhub:plugin:1.0-SNAPSHOT' }
+    dependencies { classpath 'blog.bocharoviliyav.swaggerhub:shadow-1.0-SNAPSHOT-all' }
 }
 
 apply plugin: 'swaggerhub-plugin'
@@ -10,5 +10,5 @@ swaggerhubUpload {
     inputFile = "./testApi.json"
     token = 'token'
     owner = 'owner'
-    skipOnError = true
+    skipOnError = false
 }
